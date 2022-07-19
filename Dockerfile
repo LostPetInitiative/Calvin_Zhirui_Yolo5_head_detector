@@ -1,0 +1,25 @@
+# downloader stage is used to obtain the model code from provate repo + model weights from Zenodo
+FROM ubuntu AS downloader
+WORKDIR /work
+RUN apt-get update && apt-get install --no-install-recommends -y ca-certificates git wget
+
+# we MUST use multistage build here to avoid storing PAT in image history
+ARG GITHUB_USER
+ARG GITHUB_PAT
+RUN mkdir /app
+# copying the YoloV5
+RUN git clone --depth=1 https://$GITHUB_USER:$GITHUB_PAT@github.com/LostPetInitiative/study_spring_2022.git
+RUN cp -r study_spring_2022/zhirui/yolov5 /app/yolov5
+# copying the YoloV5 weights
+RUN wget https://zenodo.org/record/6663662/files/yolov5s.pt -O /app/yolov5s.pt
+
+FROM python:3.9-slim AS FINAL
+WORKDIR /app
+COPY requirements.txt /requirements.txt
+# --extra-index-url https://download.pytorch.org/whl/cpu avoids CUDA installation
+RUN python -m pip install --upgrade pip && pip install --extra-index-url https://download.pytorch.org/whl/cpu -r /requirements.txt
+COPY code .
+COPY --from=downloader /app .
+
+CMD bash
+
