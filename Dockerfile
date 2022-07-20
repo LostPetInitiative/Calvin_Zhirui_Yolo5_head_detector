@@ -14,12 +14,27 @@ RUN cp -r study_spring_2022/zhirui/yolov5 /app/yolov5
 RUN wget https://zenodo.org/record/6663662/files/yolov5s.pt -O /app/yolov5s.pt
 
 FROM python:3.9-slim AS FINAL
+
+# installing openCV dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg libsm6 libxext6 && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY requirements.txt /requirements.txt
+
 # --extra-index-url https://download.pytorch.org/whl/cpu avoids CUDA installation
 RUN python -m pip install --upgrade pip && pip install --extra-index-url https://download.pytorch.org/whl/cpu -r /requirements.txt
-COPY code .
 COPY --from=downloader /app .
 
-CMD bash
+ENV KAFKA_URL=kafka:9092
+ENV INPUT_QUEUE=kashtanka_distinct_photos_pet_cards
+ENV OUTPUT_QUEUE=kashtanka_calvin_zhirui_yolov5_output
+CMD python3 serve.py
 
+COPY code .
+
+
+
+
+FROM FINAL as TESTS
+COPY example /app/example
+RUN python self_test.py
