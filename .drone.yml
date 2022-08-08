@@ -10,6 +10,7 @@ steps:
     GITHUB_PAT:
       from_secret: github_private_org_access
   settings:
+    repo: lostpetinitiative/calvin_zhirui_yolo5_head_detector
     dry_run: true
     target: TESTS
     build_args_from_env:
