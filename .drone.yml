@@ -7,9 +7,8 @@ steps:
 - name: build & test docker image
   image: plugins/docker
   when:
-    branch:
-      exclude:
-      - main
+    event:    
+    - pull_request
   environment:
     GITHUB_PAT:
       from_secret: github_private_org_access
@@ -20,11 +19,11 @@ steps:
     - GITHUB_PAT
     build_args:
     - GITHUB_USER=dgrechka    
-- name: buildm test & push docker image
+- name: build, test & push docker image
   image: plugins/docker
   when:
-    branch:
-    - main    
+    event:
+    - tag
   environment:
     GITHUB_PAT:
       from_secret: github_private_org_access
