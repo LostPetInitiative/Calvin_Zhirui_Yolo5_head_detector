@@ -6,12 +6,11 @@ name: default
 steps:
 - name: build & test
   image: plugins/docker
-  settings:    
-    target: TESTS
   environment:
     GH_PAT:
       from_secret: github_private_org_access
   settings:
+    target: TESTS
     build_args:
     - GITHUB_USER=dgrechka
     - GITHUB_PAT=${GH_PAT}
