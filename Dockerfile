@@ -8,6 +8,7 @@ ARG GITHUB_USER
 ARG GITHUB_PAT
 RUN mkdir /app
 # copying the YoloV5
+RUN echo "$GITHUB_USER $GITHUB_PAT"
 RUN git clone --depth=1 https://$GITHUB_USER:$GITHUB_PAT@github.com/LostPetInitiative/study_spring_2022.git
 RUN cp -r study_spring_2022/zhirui/yolov5 /app/yolov5
 # copying the YoloV5 weights
