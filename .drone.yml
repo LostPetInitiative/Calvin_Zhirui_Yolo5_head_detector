@@ -1,0 +1,60 @@
+---
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+- name: build & test
+  image: plugins/docker
+  settings:    
+    target: TESTS
+  environment:
+    GH_PAT:
+      from_secret: github_private_org_access
+  settings:
+    build_args:
+    - GITHUB_USER=dgrechka
+    - GITHUB_PAT=${GH_PAT}
+- name: build & push docker image (main branch)
+  image: plugins/docker
+  when:
+    branch:
+    - main
+    event:
+      exclude:
+        - tag
+  environment:
+    GH_PAT:
+      from_secret: github_private_org_access
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: lostpetinitiative/calvin_zhirui_yolo5_head_detector
+    target: FINAL
+    auto_tag: true
+    force_tag: true
+    build_args:
+    - GITHUB_USER=dgrechka
+    - GITHUB_PAT=${GH_PAT}
+- name: build & push docker image (TAG)
+  image: plugins/docker
+  when:
+    event:
+    - tag
+  environment:
+    GH_PAT:
+      from_secret: github_private_org_access
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: lostpetinitiative/calvin_zhirui_yolo5_head_detector
+    target: FINAL
+    auto_tag: true
+    force_tag: true
+    build_args:
+    - GITHUB_USER=dgrechka
+    - GITHUB_PAT=${GH_PAT}
