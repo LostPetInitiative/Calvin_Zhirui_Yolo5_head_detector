@@ -7,20 +7,21 @@ steps:
 - name: build & test
   image: plugins/docker
   environment:
-    GH_PAT:
+    GITHUB_PAT:
       from_secret: github_private_org_access
   settings:
     target: TESTS
+    build_args_from_env:
+    - GITHUB_PAT
     build_args:
-    - GITHUB_USER=dgrechka
-    - GITHUB_PAT=${GH_PAT}
+    - GITHUB_USER=dgrechka    
 - name: build & push docker image
   image: plugins/docker
   when:
     branch:
     - main    
   environment:
-    GH_PAT:
+    GITHUB_PAT:
       from_secret: github_private_org_access
   settings:
     username:
@@ -31,6 +32,7 @@ steps:
     target: FINAL
     auto_tag: true
     force_tag: true
+    build_args_from_env:
+    - GITHUB_PAT    
     build_args:
     - GITHUB_USER=dgrechka
-    - GITHUB_PAT=${GH_PAT}
