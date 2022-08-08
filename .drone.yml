@@ -13,7 +13,7 @@ steps:
     target: TESTS
     build_args:
     - GITHUB_USER=dgrechka
-    - GITHUB_PAT=$${GH_PAT}
+    - GITHUB_PAT=${GH_PAT}
 - name: build & push docker image
   image: plugins/docker
   when:
@@ -33,4 +33,4 @@ steps:
     force_tag: true
     build_args:
     - GITHUB_USER=dgrechka
-    - GITHUB_PAT=$${GH_PAT}
+    - GITHUB_PAT=${GH_PAT}
