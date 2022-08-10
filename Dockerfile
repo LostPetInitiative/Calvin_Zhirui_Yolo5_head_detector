@@ -29,12 +29,8 @@ ENV KAFKA_URL=kafka:9092
 ENV INPUT_QUEUE=kashtanka_distinct_photos_pet_cards
 ENV OUTPUT_QUEUE=kashtanka_calvin_zhirui_yolov5_output
 CMD python3 serve.py
-
 COPY code .
-
-
-
 
 FROM FINAL as TESTS
 COPY example /app/example
-RUN python self_test.py
+RUN python -m unittest discover -v
