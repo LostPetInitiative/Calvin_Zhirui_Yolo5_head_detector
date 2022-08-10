@@ -3,7 +3,7 @@ import os
 import unittest
 
 from model import detect_head_and_body
-from infer import infer_in_json_field
+from infer import infer_in_json_field, process_job
 
 import cv2
 import torch
@@ -28,18 +28,13 @@ class TestDetector(unittest.TestCase):
     def test_detect_head_and_body(self):
         img = load_image("./example/thumb_Pet_1548608848.426671.jpg")
 
-        body, head, annotated_img, bodies_count, heads_count = detect_head_and_body(model, img)
+        head, annotated_img, heads_count = detect_head_and_body(model, img)
 
         print(f"head shape: {head.shape}")
-        print(f"body shape: {body.shape}")
-        assert bodies_count == 0
         assert heads_count == 1
 
         assert head.shape[0] == 131
-        assert head.shape[1] == 112
-        
-        assert body.shape[0] == 400
-        assert body.shape[1] == 400
+        assert head.shape[1] == 112        
 
     def test_detect_in_json_field(self):
         json_data_path = "./example/pet911ru_rl546808_distinct_photos_snapshot.json"
@@ -51,8 +46,17 @@ class TestDetector(unittest.TestCase):
 
         expected_output = json.load(open(expected_output_path))
 
-        # assert json are equivalent
+        # assert json are equivalent        
         assert json.dumps(yolo_output) == json.dumps(expected_output)
+
+    def test_output_does_not_contain_orig_images(self):
+        json_data_path = "./example/pet911ru_rl546808_distinct_photos_snapshot.json"        
+        json_dict = json.load(open(json_data_path))
+
+        output = process_job(model, json_dict)
+
+        assert "images" not in output
+
 
 
 if __name__ == "__main__":

@@ -16,15 +16,15 @@ def detect_head_and_body(model, img):
 
         body = xyxy[xyxy[:, 5] == 1, :4].astype(int)
 
-        bodies_count = body.shape[0]
+        # bodies_count = body.shape[0]
         # print(f"bodies detected: {bodies_count}")    
         
-        if len(body) > 0:
-            body = [body[:, 0].min(), body[:, 1].min(), body[:, 2].max(), body[:, 3].max()]
-            body_crop = img[body[1]: body[3], body[0]:body[2], :]
-            annotated_img = cv2.rectangle(annotated_img, (body[0], body[1]), (body[2], body[3]), (255, 0, 0), 1) # color is in BGR
-        else:
-            body_crop = img
+        # if len(body) > 0:
+        #     body = [body[:, 0].min(), body[:, 1].min(), body[:, 2].max(), body[:, 3].max()]
+        #     body_crop = img[body[1]: body[3], body[0]:body[2], :]
+        #     annotated_img = cv2.rectangle(annotated_img, (body[0], body[1]), (body[2], body[3]), (255, 0, 0), 1) # color is in BGR
+        # else:
+        #     body_crop = img
 
         head = xyxy[xyxy[:, 5] == 0, :4].astype(int)
 
@@ -38,6 +38,6 @@ def detect_head_and_body(model, img):
         else:
             head_crop = img
 
-        return body_crop, head_crop, annotated_img, bodies_count, heads_count
+        return head_crop, annotated_img, heads_count
     else:        
-        return img, img, annotated_img, 0, 0
+        return img, annotated_img, 0
