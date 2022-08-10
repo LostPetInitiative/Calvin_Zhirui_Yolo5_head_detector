@@ -1,15 +1,15 @@
 import cv2
 
 def detect_head_and_body(model, img):
-    print("img")
-    print(img.shape)
-    print(img.dtype)
+    # print("img")
+    # print(img.shape)
+    # print(img.dtype)
     if img is None:
         return None, None, None
     annotated_img = img.copy()
     pred = model(img)
-    print("prediction")
-    print(pred)
+    # print("prediction")
+    # print(pred)
     if len(pred.xyxy) > 0:
 
         xyxy = pred.xyxy[0].cpu().numpy()
@@ -17,7 +17,7 @@ def detect_head_and_body(model, img):
         body = xyxy[xyxy[:, 5] == 1, :4].astype(int)
 
         bodies_count = body.shape[0]
-        print(f"bodies detected: {bodies_count}")    
+        # print(f"bodies detected: {bodies_count}")    
         
         if len(body) > 0:
             body = [body[:, 0].min(), body[:, 1].min(), body[:, 2].max(), body[:, 3].max()]
@@ -29,7 +29,7 @@ def detect_head_and_body(model, img):
         head = xyxy[xyxy[:, 5] == 0, :4].astype(int)
 
         heads_count = head.shape[0]
-        print(f"heads detected: {heads_count}")
+        # print(f"heads detected: {heads_count}")
 
         if len(head) > 0:
             head = [head[:, 0].min(), head[:, 1].min(), head[:, 2].max(), head[:, 3].max()]
