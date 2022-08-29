@@ -17,7 +17,7 @@ steps:
     - GITHUB_PAT
     build_args:
     - GITHUB_USER=dgrechka    
-- name: build, test & push docker image
+- name: build & push docker image
   image: plugins/docker
   when:
     event:
