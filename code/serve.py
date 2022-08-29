@@ -1,16 +1,10 @@
-import base64
-import shutil
 import os
 import sys
-import io
-
-from PIL import Image as im
 
 import torch
 
 import kafkajobs
-from model import detect_head_and_body
-from infer import infer_in_json_field,process_job
+from infer import process_job
 
 kafkaUrl = os.environ['KAFKA_URL']
 inputQueueName = os.environ['INPUT_QUEUE']

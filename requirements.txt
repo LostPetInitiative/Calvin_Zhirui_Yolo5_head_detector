@@ -2,7 +2,7 @@ numpy==1.21.2
 opencv-python-headless==4.5.5.64
 torch==1.11.0
 
-kafka-job-scheduler==1.0.*
+kafka-job-scheduler==1.2.*
 
 # truncated requrements by YoloV5. See requirements.txt
 matplotlib>=3.2.2
